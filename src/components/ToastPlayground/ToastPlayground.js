@@ -4,6 +4,10 @@ import Button from "../Button";
 
 import styles from "./ToastPlayground.module.css";
 
+import Toast from "../Toast";
+
+import useToggle from "../../hooks/useToggle";
+
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
@@ -11,6 +15,7 @@ function ToastPlayground() {
     message: "",
     variant: VARIANT_OPTIONS[0],
   });
+  const [isToastShown, toggleToastShown] = useToggle(false);
   return (
     <div className={styles.wrapper}>
       <header>
@@ -18,7 +23,20 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <div className={styles.controlsWrapper}>
+      <Toast
+        isShown={isToastShown}
+        handleDismiss={toggleToastShown}
+        variant={formData.variant}
+        message={formData.message}
+      />
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          toggleToastShown(true);
+        }}
+        className={styles.controlsWrapper}
+      >
         <div className={styles.row}>
           <label
             htmlFor="message"
@@ -63,10 +81,10 @@ function ToastPlayground() {
         <div className={styles.row}>
           <div className={styles.label} />
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
-            <Button>Pop Toast!</Button>
+            <Button type="submit">Pop Toast!</Button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
