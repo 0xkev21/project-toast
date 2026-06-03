@@ -6,16 +6,20 @@ import styles from "./ToastPlayground.module.css";
 
 import Toast from "../Toast";
 
+import ToastShelf from "../ToastShelf";
+
 import useToggle from "../../hooks/useToggle";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
 function ToastPlayground() {
-  const [formData, setFormData] = React.useState({
-    message: "",
-    variant: VARIANT_OPTIONS[0],
-  });
-  const [isToastShown, toggleToastShown] = useToggle(false);
+  const [message, setMessage] = React.useState("");
+  const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
+  const [isToastShown, setIsToastShown] = React.useState(false);
+
+  function handleDismiss() {
+    setIsToastShown(false);
+  }
   return (
     <div className={styles.wrapper}>
       <header>
@@ -23,17 +27,20 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <Toast
-        isShown={isToastShown}
-        handleDismiss={toggleToastShown}
-        variant={formData.variant}
-        message={formData.message}
-      />
+      {isToastShown && (
+        <Toast
+          isShown={isToastShown}
+          handleDismiss={handleDismiss}
+          variant={variant}
+        >
+          {message}
+        </Toast>
+      )}
 
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          toggleToastShown(true);
+          setIsToastShown(true);
         }}
         className={styles.controlsWrapper}
       >
@@ -48,10 +55,8 @@ function ToastPlayground() {
           <div className={styles.inputWrapper}>
             <textarea
               id="message"
-              value={formData.message}
-              onChange={(e) =>
-                setFormData({ ...formData, message: e.target.value })
-              }
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               className={styles.messageInput}
             />
           </div>
@@ -67,9 +72,9 @@ function ToastPlayground() {
                   type="radio"
                   name="variant"
                   value={option}
-                  checked={formData.variant === option}
+                  checked={variant === option}
                   onChange={(e) => {
-                    setFormData({ ...formData, variant: e.target.value });
+                    setVariant(e.target.value);
                   }}
                 />
                 {option}

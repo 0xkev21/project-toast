@@ -1,6 +1,6 @@
 .toast {
   position: relative;
-  display: none;
+  display: flex;
   align-items: center;
   gap: 16px;
   border-radius: 16px;
@@ -10,10 +10,6 @@
   max-width: 100%;
   width: 350px;
   box-shadow: var(--shadow-elevation-medium);
-}
-
-.toast[data-shown="true"] {
-  display: flex;
 }
 
 .content {
